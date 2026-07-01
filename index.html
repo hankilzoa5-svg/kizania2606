@@ -1,0 +1,310 @@
+아래 코드 전체를 복사해서 깃허브의 `index.html` 파일에 그대로 붙여넣으시면 됩니다.
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>세스코 — 키자니아</title>
+  <style>
+    body { margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; background-color: #f5f5f5; color: #333; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 640px; background: #fff; min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.05); position: relative; box-sizing: border-box; display: flex; flex-direction: column; text-align: center; }
+    .page { display: none; flex-direction: column; flex: 1; }
+    .page.active { display: flex; }
+    
+    /* 상단 배너 */
+    .main-banner { background-color: #154ba3; color: #fff; padding: 40px 30px; text-align: center; }
+    .logo-area { font-weight: 800; font-size: 24px; letter-spacing: 0.5px; margin-bottom: 15px; }
+    .main-banner h2 { font-size: 24px; margin: 0 0 15px 0; font-weight: 700; line-height: 1.4; }
+    .main-banner p { font-size: 13px; margin: 0; opacity: 0.85; line-height: 1.6; }
+    
+    /* 미니 요약 섹션 */
+    .promo-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 20px 25px; background: #154ba3; border-top: 1px solid rgba(255,255,255,0.1); color: #fff;}
+    .promo-box { text-align: center; border-right: 1px solid rgba(255,255,255,0.2); padding: 5px 0; }
+    .promo-box:last-child { border-right: none; }
+    .promo-box .title { font-size: 13px; font-weight: bold; margin-bottom: 4px; }
+    .promo-box .desc { font-size: 11px; opacity: 0.8; }
+    
+    /* 통합 혜택 본문 */
+    .content-area { padding: 25px; background: #fff; flex: 1; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
+    .section-title { font-size: 16px; font-weight: bold; color: #154ba3; margin: 35px 0 10px 0; border-bottom: 2px solid #154ba3; padding-bottom: 5px; width: 100%; text-align: center; }
+    .section-title:first-of-type { margin-top: 0; }
+    .section-desc { font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 15px; text-align: center; width: 100%; }
+    
+    /* 혜택 1 영역 정렬 패딩 */
+    .benefit-one-block { width: 100%; display: flex; flex-direction: column; align-items: center; margin: 15px 0; }
+    .login-text-link { margin-top: 15px; font-size: 14px; color: #555; text-align: center; }
+    .login-text-link a { color: #154ba3; font-weight: bold; text-decoration: underline; cursor: pointer; }
+    
+    /* 공통 대형 액션 버튼 */
+    .action-btn { width: 90%; max-width: 500px; display: flex; background: #154ba3; color: #fff; border: none; border-radius: 4px; overflow: hidden; cursor: pointer; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 0 auto; box-sizing: border-box; }
+    .action-btn .btn-side { background: rgba(0,0,0,0.15); padding: 20px 15px; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.3; min-width: 60px; }
+    .action-btn .btn-main { flex: 1; padding: 20px; font-weight: bold; font-size: 16px; text-align: center; align-self: center; }
+    .action-btn.blue-light { background: #4a90e2; }
+    
+    /* 공통 테이블 스타일 (톤앤매너 통일) */
+    .info-table { width: 100%; max-width: 500px; border-collapse: collapse; margin: 10px auto; font-size: 12px; text-align: center; }
+    .info-table th, .info-table td { border: 1px solid #cbd5e1; padding: 10px 6px; line-height: 1.4; text-align: center; }
+    .info-table th { background: #f1f5f9; color: #333; font-weight: bold; }
+    
+    /* 혜택 3: 리스트 스타일 */
+    .service-list { list-style: none; padding: 0; margin: 0 0 25px 0; width: 100%; max-width: 500px; text-align: center; }
+    .service-item { margin-bottom: 20px; padding: 0 10px; }
+    .service-item h4 { margin: 0 0 6px 0; font-size: 14px; color: #154ba3; font-weight: bold; text-align: center; }
+    .service-item p { margin: 0; font-size: 12px; color: #666; line-height: 1.5; text-align: center; }
+    
+    .btn-container { width: 100%; display: center; justify-content: center; margin: 15px 0; }
+    
+    /* 완료 페이지 전용 */
+    .success-header { text-align: center; padding: 40px 20px; background: #f8fafc; border-bottom: 1px solid #eee; }
+    .success-icon { font-size: 44px; margin-bottom: 15px; display: block; }
+    .success-header h2 { font-size: 22px; color: #154ba3; margin: 0 0 10px 0; font-weight: 700; text-align: center; }
+    .success-header p { font-size: 14px; color: #555; margin: 0; line-height: 1.5; text-align: center; }
+    .benefit-list { padding: 25px; background: #fff; flex: 1; display: flex; flex-direction: column; align-items: center; width: 100%; box-sizing: border-box; }
+    .benefit-item { background: #f1f5f9; border-radius: 6px; padding: 18px; margin-bottom: 15px; border-top: 4px solid #154ba3; width: 100%; max-width: 500px; box-sizing: border-box; }
+    .benefit-item h4 { margin: 0 0 6px 0; font-size: 15px; color: #154ba3; font-weight: bold; text-align: center; }
+    .benefit-item p { margin: 0; font-size: 13px; color: #555; line-height: 1.5; text-align: center; }
+    
+    /* 쿠폰 코드 박스 스타일 */
+    .coupon-box { background: #fffde7; border: 1px dashed #ffe082; padding: 14px; text-align: center; font-weight: bold; color: #b71c1c; margin-top: 10px; cursor: pointer; transition: background 0.2s; border-radius: 4px; font-size: 14px; width: 100%; max-width: 500px; box-sizing: border-box; }
+    .coupon-box:hover { background: #fff9c4; }
+    .coupon-tip { font-size: 11px; color: #e65100; font-weight: normal; margin-top: 4px; display: block; }
+    
+    .back-btn { background: #edf2f7; color: #4a5568; text-align: center; padding: 15px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; margin: 20px auto 40px auto; cursor: pointer; border: none; width: 80%; max-width: 300px; }
+    .footer-area { background: #fafafa; border-top: 1px solid #eee; padding: 35px 25px; text-align: center; font-size: 11px; color: #777; line-height: 1.7; width: 100%; box-sizing: border-box; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- [1페이지] 통합 혜택 안내 화면 -->
+    <div id="page1" class="page active">
+      <div class="main-banner">
+        <div class="logo-area">CESCO X 키자니아</div>
+        <h2>키자니아 방문 고객 전용 페이지</h2>
+        <p>아이가 체험을 기다리는 동안, QR코드를 스캔하고<br>세스코몰의 다양한 혜택과 서비스를 경험하세요</p>
+      </div>
+
+      <div class="promo-section">
+        <div class="promo-box"><div class="title">혜택 1 🎁</div><div class="desc">배수구클리너 본품<br>현장 증정</div></div>
+        <div class="promo-box"><div class="title">혜택 2 💯</div><div class="desc">100원 혜택<br>첫 구매 100원</div></div>
+        <div class="promo-box"><div class="title">혜택 3 🎫</div><div class="desc">5,000원권<br>키자니아 전용 쿠폰</div></div>
+      </div>
+
+      <div class="content-area">
+        <!-- 혜택 1 섹션 -->
+        <div class="section-title">① 혜택 1 : 마이랩 배수구 클리너 증정</div>
+        <div class="section-desc">
+          세스코몰 회원이신가요?<br>
+          로그인이나 신규 회원가입을 완료하시면 특별한 혜택이 제공됩니다.<br>
+          <strong>신청 완료화면을 현장직원에게 보여주면 마이랩 배수구 클리너 즉시 증정</strong>
+        </div>
+        
+        <div class="benefit-one-block">
+          <!-- 회원가입 URL 버튼 유지 -->
+          <button class="action-btn" onclick="goToPage(4)">
+            <div class="btn-side">회원<br>가입</div>
+            <div class="btn-main">배수구 클리너 신청하기</div>
+          </button>
+          <!-- 로그인 버튼을 UI 텍스트 링크 스타일로 수정 -->
+          <div class="login-text-link">
+            세스코 회원이시라면? <a onclick="goToPage(4)">로그인하기</a>
+          </div>
+        </div>
+
+        <!-- 혜택 2 섹션 -->
+        <div class="section-title">② 혜택 2 : 회원가입 시 혜택 안내</div>
+        <div class="section-desc">세스코몰 회원이 되면 누릴 수 있는 특별한 혜택</div>
+        
+        <div style="text-align:center; font-weight:bold; margin: 15px auto 5px auto; font-size:14px; border:1px solid #333; padding:5px; display:inline-block;">세스코몰 가입 혜택</div>
+        <div class="section-desc" style="font-size:12px; margin-bottom:5px;">키자니아 전용 입장 페이지에서만 제공되는 특별한 혜택</div>
+        
+        <!-- 도표 부분을 요청하신 쿠폰 복사 박스로 교체 -->
+        <div style="width: 100%; max-width: 500px; margin: 10px 0; text-align: center;">
+          <div style="font-size: 13px; font-weight: bold; color: #154ba3; margin-bottom: 5px;">[이벤트 신청 혜택] 키자니아 전용 추가 5,000원 웰컴 쿠폰</div>
+          <div style="font-size: 11px; color: #666; margin-bottom: 8px;">아래 박스를 클릭하시면 쿠폰코드가 자동으로 복사됩니다.</div>
+          <div class="coupon-box" onclick="copyCouponCode('CESCOKIDZANIA')" style="margin-top: 0; margin-left: auto; margin-right: auto;">
+            쿠폰코드 : CESCOKIDZANIA
+            <span class="coupon-tip">터치하여 코드 복사하기</span>
+          </div>
+        </div>
+
+        <div class="section-desc" style="font-size:12px; margin: 25px 0 5px 0; text-align:center; font-weight:bold; color:#154ba3;">세스코 회원님이라면 무료배송으로 드리는 첫구매 100원 혜택</div>
+        <table class="info-table">
+          <tr>
+            <th>첫구매 특가 할인</th>
+            <th>앱 구매 할인 쿠폰</th>
+            <th>구매 포인트 적립</th>
+          </tr>
+          <tr>
+            <td style="font-weight:bold; color:red;">100원</td>
+            <td style="font-weight:bold;">5% 할인쿠폰</td>
+            <td style="font-weight:bold;">3% 페이백</td>
+          </tr>
+          <tr>
+            <td>세스코 마이랩,<br>환경위생 용품 제품</td>
+            <td>세스코몰<br>앱 전용</td>
+            <td>세스코몰<br>구매금액 적립</td>
+          </tr>
+        </table>          
+        
+        <div style="margin-top:25px; text-align:center; width:100%;">
+          <strong style="font-size:13px; color:#154ba3; display:block; margin-bottom:10px;">💡 쿠폰 사용 방법</strong>
+          <p style="font-size:11px; color:#777; text-align:center; margin-bottom:8px; margin-top:0;">
+            쿠폰 사용 방법: 마이페이지 &gt; 쿠폰 &gt; 쿠폰 / 이벤트당첨 등록 &gt; 쿠폰번호 등록
+          </p>
+          <table class="info-table" style="margin-top:0; margin-bottom:5px; width:100%;">
+            <tr>
+              <th>STEP 01</th>
+              <th>STEP 02</th>
+              <th>STEP 03</th>
+              <th>STEP 04</th>
+            </tr>
+            <tr>
+              <td style="font-weight:bold; color:#154ba3; padding:10px 4px;">마이페이지</td>
+              <td style="font-weight:bold; color:#154ba3; padding:10px 4px;">쿠폰</td>
+              <td style="font-weight:bold; color:#154ba3; font-size:11px; padding:10px 2px;">쿠폰 / 이벤트당첨 등록</td>
+              <td style="font-weight:bold; color:#154ba3; padding:10px 4px;">쿠폰번호 등록</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 혜택 3 섹션 -->
+      <div class="content-area" style="padding-top:0;">
+        <div class="section-title">③ 혜택 3 : 전문가 진단서비스 혜택 안내(4종)</div>
+        <ul class="service-list">
+
+        <div style="text-align:center; font-weight:bold; margin: 15px auto 5px auto; font-size:14px; border:1px solid #333; padding:5px; display:inline-block;">전문가 진단 혜택</div>
+          <p style="margin: 0 0 15px 0; font-size: 12px; color: #666; line-height: 1.5; text-align: center;">대한민국 No.1 종합환경 위생기업 세스코, 세스코 전문가 무료 방문 서비스를 소개합니다.</p>
+          <li class="service-item">
+            <h4>1. 해충 정밀진단</h4>
+            <p> 해충 서식지 정밀 점검 서비스, 해충방제 골든타임의 기적을 만나보세요 </p>
+          </li>
+          <li class="service-item">
+            <h4>2. 플러스알파케어 체험</h4>
+            <p>소독제 배수구 클리너 현장 케어 주방 후드 기름때 점검 포함</p>
+          </li>
+          <li class="service-item">
+            <h4>3. 실내 공기질 · 라돈 진단</h4>
+            <p>실내 공기를 더 안전하게 진단하고 싶다면? 세스코 전문가 방문하여 공기질 정밀 측정 + 라돈 수치 확인</p>
+          </li>
+          <li class="service-item">
+            <h4>4. 침구 · 매트리스 오염진단 (오픈예정)</h4>
+            <p>현미경으로 진드기 및 먼지 오염도 확인 침구 위생 관리 솔루션</p>
+          </li>
+        </ul>
+        
+        <div class="btn-container" style="display: flex; justify-content: center;">
+          <button class="action-btn blue-light" onclick="goToPage(5)">
+            <div class="btn-side" style="background:rgba(0,0,0,0.1);">별도<br>URL</div>
+            <div class="btn-main">전문 서비스 신청하기</div>
+          </button>
+        </div>
+      </div>
+      
+      <div class="footer-area">
+        세스코(주) &nbsp;|&nbsp; 고객센터 1588-1119 월~금 08:30~18:00 &nbsp;/&nbsp; 토 09:00~13:00<br>
+        www.cesco.co.kr
+      </div>
+    </div>
+
+    <!-- [4페이지] 회원가입 완료 안내 페이지 -->
+    <div id="page4" class="page">
+      <div class="success-header">
+        <span class="success-icon">🎉</span>
+        <h2>이벤트 신청이 완료되었습니다!</h2>
+        <p>세스코몰 회원 확인이 완료되었습니다.<br>스태프에게 이 화면을 보여주시고 현장 사은품을 수령하세요.</p>
+      </div>
+      <div class="benefit-list">
+        <div class="content-title" style="margin-bottom: 15px; font-weight:bold; color:#154ba3; text-align:center;">🎁 제공 혜택 및 사은품 안내</div>
+        
+        <div class="benefit-item">
+          <h4>[회원가입 혜택] 키자니아 전용 추가 5,000원 웰컴 쿠폰</h4>
+          <p>아래 박스를 클릭하시면 쿠폰코드가 자동으로 복사됩니다.</p>
+          
+          <div class="coupon-box" onclick="copyCouponCode('CESCOKIDZANIA')">
+            쿠폰코드 : CESCOKIDZANIA
+            <span class="coupon-tip">터치하여 코드 복사하기</span>
+          </div>
+          
+          <div style="margin-top:25px; text-align:center; width:100%;">
+            <strong style="font-size:13px; color:#154ba3; display:block; margin-bottom:10px;">💡 쿠폰 사용 방법</strong>
+            <table class="info-table" style="margin-top:0; margin-bottom:5px; width:100%;">
+              <tr>
+                <th>STEP 01</th>
+                <th>STEP 02</th>
+                <th>STEP 03</th>
+                <th>STEP 04</th>
+              </tr>
+              <tr>
+                <td style="font-weight:bold; color:#154ba3; padding:10px 4px;">마이페이지</td>
+                <td style="font-weight:bold; color:#154ba3; padding:10px 4px;">쿠폰</td>
+                <td style="font-weight:bold; color:#154ba3; font-size:11px; padding:10px 2px;">쿠폰 / 이벤트당첨 등록</td>
+                <td style="font-weight:bold; color:#154ba3; padding:10px 4px;">쿠폰번호 등록</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <button class="back-btn" onclick="goToPage(1)">◀ 처음 화면으로</button>
+    </div>
+
+    <!-- [5페이지] 전문서비스 신청 완료 페이지 -->
+    <div id="page5" class="page">
+      <div class="success-header">
+        <span class="success-icon">👍</span>
+        <h2>진단 서비스 신청 완료!</h2>
+        <p>선택하신 위생 진단 서비스 배정이 접수되었습니다.<br>전문가가 확인 후 순차적으로 연락을 드릴 예정입니다.</p>
+      </div>
+      <div class="benefit-list">
+        <div class="benefit-item" style="border-top-color: #2ed573;">
+          <h4>감사합니다.</h4>
+          <p>현장 스태프에게 인증을 완료해주셔서 감사합니다. 안전하고 위생적인 하루 되세요!</p>
+        </div>
+      </div>
+      <button class="back-btn" onclick="goToPage(1)">◀ 처음 화면으로</button>
+    </div>
+
+  </div>
+
+  <script>
+    function goToPage(pageNum) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page' + pageNum).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function copyCouponCode(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          alert('쿠폰코드 복사가 완료되었습니다.');
+        }).catch(function(err) {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      var textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";  
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        alert('쿠폰코드 복사가 완료되었습니다.');
+      } catch (err) {
+        alert('복사에 실패했습니다. 수동으로 복사해 주세요.');
+      }
+      document.body.removeChild(textArea);
+    }
+  </script>
+</body>
+</html>
+
+```
